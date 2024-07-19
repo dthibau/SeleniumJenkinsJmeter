@@ -1,4 +1,5 @@
 import io.qameta.allure.Allure;
+import io.qameta.allure.Step;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,7 @@ public class MySeleniumTest {
     }
 
     @Test
+    @Step("Acessing Home Page")
     public void testHomePage() {
         driver.get("http://localhost:8080");
 
@@ -57,9 +59,8 @@ public class MySeleniumTest {
             WebDriver driver = ((MySeleniumTest) context.getRequiredTestInstance()).driver;
             if (driver != null) {
                 File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-                String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
                 try {
-                    Files.copy(screenshot.toPath(), Paths.get("screenshots", "screenshot-" + timestamp + ".png"));
+                    Allure.addAttachment("Screenshot", new ByteArrayInputStream(Files.readAllBytes(screenshot.toPath())));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
